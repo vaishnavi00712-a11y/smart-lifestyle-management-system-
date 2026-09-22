@@ -1,0 +1,6 @@
+{
+  "name": "Smart Lifestyle Management System",
+  "description": "Comprehensive full-stack lifestyle platform integrating daily routines, tasks, fitness, nutrition, water intake, sleep, habit tracking, goals, Pomodoro focus sessions, and dynamic lifestyle scoring with real persistent data storage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

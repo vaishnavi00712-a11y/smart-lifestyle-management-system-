@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Smart Lifestyle Management System</title>
+    <script>
+      // GitHub Pages SPA redirect: converts deep path into hash route on index.html
+      (function () {
+        var path = window.location.pathname;
+        var repoMatch = path.match(/^\/([^/]+)/);
+        var repoName = repoMatch ? '/' + repoMatch[1] : '';
+        var subPath = path.replace(repoName, '');
+        if (subPath.startsWith('/')) subPath = subPath.substring(1);
+        
+        var destination = repoName + '/#/' + subPath + window.location.search;
+        window.location.replace(destination);
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to application...</p>
+  </body>
+</html>
