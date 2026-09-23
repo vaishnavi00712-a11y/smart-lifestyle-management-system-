@@ -25,6 +25,7 @@ const STORAGE_KEYS = {
   SLEEP: 'ls_app_sleep',
   HABITS: 'ls_app_habits',
   GOALS: 'ls_app_goals',
+  FOCUS_SESSIONS: 'ls_app_focus_sessions',
   SETTINGS: 'ls_app_settings',
 };
 
@@ -48,7 +49,17 @@ function setItem<T>(key: string, value: T): void {
 // Seed initial data if first time
 function ensureInitialSeed() {
   const users = getItem<User[]>(STORAGE_KEYS.USERS, []);
-  if (users.length === 0) {
+  if (users.length === 0 || !users.some(u => u.email.toLowerCase() === 'demo@lifestyle.com')) {
+    const demoUser: User = {
+      _id: 'user_alex_1',
+      name: 'Alex Morgan',
+      email: 'demo@lifestyle.com',
+      age: 28,
+      lifestyle_goal: 'Peak Productivity & Balanced Wellness',
+      profile_image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
     const defaultUser: User = {
       _id: 'local_user_1',
       name: 'Alex Rivera',
@@ -58,7 +69,7 @@ function ensureInitialSeed() {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
-    setItem(STORAGE_KEYS.USERS, [defaultUser]);
+    setItem(STORAGE_KEYS.USERS, [demoUser, defaultUser]);
   }
 
   const routines = getItem<RoutineItem[]>(STORAGE_KEYS.ROUTINES, []);
@@ -217,18 +228,21 @@ ensureInitialSeed();
 export class LocalFallbackEngine {
   public static handleRequest<T>(method: string, endpoint: string, body?: any): ApiResponse<T> {
     ensureInitialSeed();
-    const cleanEndpoint = endpoint.split('?')[0].replace(/^\/api/, '');
+    let cleanEndpoint = endpoint.split('?')[0].trim();
+    if (!cleanEndpoint.startsWith('/')) cleanEndpoint = '/' + cleanEndpoint;
+    cleanEndpoint = cleanEndpoint.replace(/^\/api/, '');
+    if (!cleanEndpoint.startsWith('/')) cleanEndpoint = '/' + cleanEndpoint;
     const today = new Date().toISOString().slice(0, 10);
 
     // Auth endpoints
     if (cleanEndpoint === '/auth/login' && method === 'POST') {
-      const email = body?.email || 'alex@lifestyle.com';
+      const email = (body?.email || 'alex@lifestyle.com').trim();
       const users = getItem<User[]>(STORAGE_KEYS.USERS, []);
       let user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
       if (!user) {
         user = {
           _id: `user_${Date.now()}`,
-          name: email.split('@')[0],
+          name: email.includes('@') ? email.split('@')[0] : 'User',
           email,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
@@ -293,7 +307,7 @@ export class LocalFallbackEngine {
     }
 
     // Dashboard Overview
-    if (cleanEndpoint === '/dashboard/overview') {
+    if ((cleanEndpoint === '/dashboard' || cleanEndpoint === '/dashboard/overview') && method === 'GET') {
       const tasks = getItem<Task[]>(STORAGE_KEYS.TASKS, []);
       const routines = getItem<RoutineItem[]>(STORAGE_KEYS.ROUTINES, []);
       const water = getItem<WaterData[]>(STORAGE_KEYS.WATER, []);
@@ -450,6 +464,11 @@ export class LocalFallbackEngine {
     if (cleanEndpoint.startsWith('/activities/')) {
       const id = cleanEndpoint.replace('/activities/', '');
       const activities = getItem<Activity[]>(STORAGE_KEYS.ACTIVITIES, []);
+      if (method === 'PUT') {
+        const updated = activities.map(a => (a._id === id ? { ...a, ...body } : a));
+        setItem(STORAGE_KEYS.ACTIVITIES, updated);
+        return { success: true, data: updated.find(a => a._id === id) as any };
+      }
       if (method === 'DELETE') {
         setItem(STORAGE_KEYS.ACTIVITIES, activities.filter(a => a._id !== id));
         return { success: true } as any;
@@ -482,6 +501,11 @@ export class LocalFallbackEngine {
     if (cleanEndpoint.startsWith('/meals/')) {
       const id = cleanEndpoint.replace('/meals/', '');
       const meals = getItem<Meal[]>(STORAGE_KEYS.MEALS, []);
+      if (method === 'PUT') {
+        const updated = meals.map(m => (m._id === id ? { ...m, ...body } : m));
+        setItem(STORAGE_KEYS.MEALS, updated);
+        return { success: true, data: updated.find(m => m._id === id) as any };
+      }
       if (method === 'DELETE') {
         setItem(STORAGE_KEYS.MEALS, meals.filter(m => m._id !== id));
         return { success: true } as any;
@@ -489,7 +513,7 @@ export class LocalFallbackEngine {
     }
 
     // Water
-    if (cleanEndpoint === '/water') {
+    if (cleanEndpoint === '/water' || cleanEndpoint === '/water/today') {
       const waterList = getItem<WaterData[]>(STORAGE_KEYS.WATER, []);
       if (method === 'GET') {
         const current = waterList.find(w => w.date === today) || {
@@ -514,6 +538,25 @@ export class LocalFallbackEngine {
           date: today,
           updated_at: new Date().toISOString(),
         };
+        setItem(STORAGE_KEYS.WATER, [...filtered, updated]);
+        return { success: true, data: updated as any };
+      }
+      if (method === 'PUT') {
+        const daily_goal = Number(body?.daily_goal || body?.goal) || 8;
+        const current = waterList.find(w => w.date === today) || {
+          _id: `w_${today}`,
+          user_id: 'local_user',
+          glasses: 6,
+          daily_goal: 8,
+          date: today,
+          updated_at: new Date().toISOString(),
+        };
+        const updated: WaterData = {
+          ...current,
+          daily_goal,
+          updated_at: new Date().toISOString(),
+        };
+        const filtered = waterList.filter(w => w.date !== today);
         setItem(STORAGE_KEYS.WATER, [...filtered, updated]);
         return { success: true, data: updated as any };
       }
@@ -566,14 +609,17 @@ export class LocalFallbackEngine {
       }
     }
 
-    if (cleanEndpoint.includes('/habits/') && cleanEndpoint.endsWith('/toggle')) {
-      const id = cleanEndpoint.replace('/habits/', '').replace('/toggle', '');
+    if (
+      cleanEndpoint.includes('/habits/') &&
+      (cleanEndpoint.endsWith('/toggle') || cleanEndpoint.endsWith('/complete'))
+    ) {
+      const id = cleanEndpoint.replace('/habits/', '').replace(/\/toggle|\/complete/, '');
       const habits = getItem<Habit[]>(STORAGE_KEYS.HABITS, []);
       const updated = habits.map(h => {
         if (h._id !== id) return h;
-        const completed = !h.completedToday;
+        const completed = typeof body?.completed === 'boolean' ? body.completed : !h.completedToday;
         const dates = h.completed_dates || [];
-        const newDates = completed ? [...dates, today] : dates.filter(d => d !== today);
+        const newDates = completed ? [...dates.filter(d => d !== today), today] : dates.filter(d => d !== today);
         return {
           ...h,
           completedToday: completed,
@@ -632,10 +678,43 @@ export class LocalFallbackEngine {
       }
     }
 
+    // Focus sessions & productivity
+    if (cleanEndpoint === '/focus-sessions' || cleanEndpoint === '/productivity/stats') {
+      const sessions = getItem<any[]>(STORAGE_KEYS.FOCUS_SESSIONS, []);
+      if (method === 'GET') {
+        const todaySessions = sessions.filter(s => (s.date || s.created_at || '').startsWith(today));
+        const todayMinutes = todaySessions.reduce((acc, s) => acc + (s.duration || 0), 0);
+        const weeklyMinutes = sessions.reduce((acc, s) => acc + (s.duration || 0), todayMinutes);
+        return {
+          success: true,
+          data: {
+            sessions,
+            todaySessionsCount: todaySessions.length,
+            todayMinutes,
+            weeklyMinutes,
+            totalSessionsCount: sessions.length,
+          } as any,
+        };
+      }
+      if (method === 'POST') {
+        const newSession = {
+          _id: `fs_${Date.now()}`,
+          user_id: 'local_user',
+          duration: Number(body?.duration) || 25,
+          tag: body?.tag || 'General',
+          status: body?.status || 'completed',
+          date: today,
+          created_at: new Date().toISOString(),
+        };
+        setItem(STORAGE_KEYS.FOCUS_SESSIONS, [newSession, ...sessions]);
+        return { success: true, data: newSession as any };
+      }
+    }
+
     // Reports
-    if (cleanEndpoint === '/reports') {
+    if (cleanEndpoint.startsWith('/reports')) {
       const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      const report: WeeklyReport = {
+      const report: any = {
         tasks_by_day: days.map((_d, i) => ({
           date: `2026-09-${16 + i}`,
           completed: 3 + (i % 3),
@@ -643,7 +722,7 @@ export class LocalFallbackEngine {
         })),
         focus_by_day: days.map((_d, i) => ({
           date: `2026-09-${16 + i}`,
-          minutes: 0,
+          minutes: 25 * ((i % 3) + 1),
         })),
         sleep_by_day: days.map((_d, i) => ({
           date: `2026-09-${16 + i}`,

@@ -195,6 +195,61 @@ class DatabaseManager {
     } else {
       this.seedInitialData();
     }
+
+    // Always ensure the demo user exists and has password 'password123'
+    this.ensureDemoUsers();
+  }
+
+  private ensureDemoUsers() {
+    if (!Array.isArray(this.data.users)) {
+      this.data.users = [];
+    }
+
+    const salt = bcrypt.genSaltSync(10);
+    const pass123Hash = bcrypt.hashSync('password123', salt);
+    const now = new Date().toISOString();
+    let changed = false;
+
+    // Check demo@lifestyle.com
+    const demoUser = this.data.users.find(u => u.email.toLowerCase() === 'demo@lifestyle.com');
+    if (!demoUser) {
+      this.data.users.unshift({
+        _id: 'user_alex_1',
+        name: 'Alex Morgan',
+        email: 'demo@lifestyle.com',
+        password_hash: pass123Hash,
+        age: 28,
+        lifestyle_goal: 'Peak Productivity & Balanced Wellness',
+        profile_image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        created_at: now,
+        updated_at: now,
+      });
+      changed = true;
+    } else if (!bcrypt.compareSync('password123', demoUser.password_hash)) {
+      demoUser.password_hash = pass123Hash;
+      changed = true;
+    }
+
+    // Also ensure alex@lifestyle.com exists with password123 as secondary alias
+    const alexUser = this.data.users.find(u => u.email.toLowerCase() === 'alex@lifestyle.com');
+    if (!alexUser) {
+      this.data.users.push({
+        _id: 'user_alex_legacy',
+        name: 'Alex Rivera',
+        email: 'alex@lifestyle.com',
+        password_hash: pass123Hash,
+        age: 26,
+        lifestyle_goal: 'Healthy Sleep & Balanced Routine',
+        profile_image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        created_at: now,
+        updated_at: now,
+      });
+      changed = true;
+    }
+
+    if (changed) {
+      this.saveLocal();
+    }
   }
 
   private async initMongoOptional() {

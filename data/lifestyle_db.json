@@ -1,0 +1,340 @@
+{
+  "users": [
+    {
+      "_id": "user_alex_1",
+      "name": "Alex Morgan",
+      "email": "demo@lifestyle.com",
+      "password_hash": "$2b$10$WBXB4VxI3yGaf8eiWfGuQOF8Pg0den82b47SrxyBdF1X9nh.Nnoou",
+      "age": 28,
+      "lifestyle_goal": "Peak Productivity & Balanced Wellness",
+      "profile_image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "user_jordan_2",
+      "name": "Jordan Lee",
+      "email": "userb@lifestyle.com",
+      "password_hash": "$2b$10$WBXB4VxI3yGaf8eiWfGuQOF8Pg0den82b47SrxyBdF1X9nh.Nnoou",
+      "age": 32,
+      "lifestyle_goal": "Athletic Endurance & Mindfulness",
+      "profile_image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "user_alex_legacy",
+      "name": "Alex Rivera",
+      "email": "alex@lifestyle.com",
+      "password_hash": "$2b$10$1v9I0ELgh.MpCpj1HKu9O.4PgzleBF/hug2k5SfNkCMwLu12Pbj4a",
+      "age": 26,
+      "lifestyle_goal": "Healthy Sleep & Balanced Routine",
+      "profile_image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "created_at": "2026-09-23T02:31:14.152Z",
+      "updated_at": "2026-09-23T02:31:14.152Z"
+    }
+  ],
+  "tasks": [
+    {
+      "_id": "task_1",
+      "user_id": "user_alex_1",
+      "title": "Review System Architecture Design",
+      "description": "Ensure API middleware and database schema match specifications.",
+      "category": "Work",
+      "priority": "High",
+      "due_date": "2026-09-23",
+      "completed": true,
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "task_2",
+      "user_id": "user_alex_1",
+      "title": "Complete 30-min HIIT cardio",
+      "description": "Morning interval run with warm-up stretches.",
+      "category": "Fitness",
+      "priority": "Medium",
+      "due_date": "2026-09-23",
+      "completed": true,
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "task_3",
+      "user_id": "user_alex_1",
+      "title": "Read 20 pages of Deep Work",
+      "description": "Focus on time blocking and habit design chapter.",
+      "category": "Personal",
+      "priority": "Medium",
+      "due_date": "2026-09-23",
+      "completed": false,
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "task_4",
+      "user_id": "user_alex_1",
+      "title": "Prepare healthy balanced dinner",
+      "description": "Grilled salmon with asparagus and quinoa bowl.",
+      "category": "Health",
+      "priority": "Low",
+      "due_date": "2026-09-23",
+      "completed": false,
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "task_b1",
+      "user_id": "user_jordan_2",
+      "title": "Jordan Marathon Prep Running Plan",
+      "description": "Long distance run (12km) at pace 5:10 min/km",
+      "category": "Fitness",
+      "priority": "High",
+      "due_date": "2026-09-23",
+      "completed": true,
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "routine": [
+    {
+      "_id": "routine_1",
+      "user_id": "user_alex_1",
+      "title": "Morning Hydration & Sunlight",
+      "category": "Health",
+      "time": "07:00",
+      "priority": "High",
+      "completed": true,
+      "date": "2026-09-23",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "routine_2",
+      "user_id": "user_alex_1",
+      "title": "Focused Sprint 1",
+      "category": "Work",
+      "time": "09:00",
+      "priority": "High",
+      "completed": true,
+      "date": "2026-09-23",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "routine_3",
+      "user_id": "user_alex_1",
+      "title": "Nutritious Lunch & Walk",
+      "category": "Health",
+      "time": "12:30",
+      "priority": "Medium",
+      "completed": true,
+      "date": "2026-09-23",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "routine_4",
+      "user_id": "user_alex_1",
+      "title": "Evening Digital Sunset & Wind Down",
+      "category": "Personal",
+      "time": "21:30",
+      "priority": "Medium",
+      "completed": false,
+      "date": "2026-09-23",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "activities": [
+    {
+      "_id": "act_1",
+      "user_id": "user_alex_1",
+      "activity_type": "Running / Jogging",
+      "duration": 35,
+      "steps": 4200,
+      "calories": 340,
+      "date": "2026-09-23",
+      "notes": "Felt energetic along the riverside trail",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "act_2",
+      "user_id": "user_alex_1",
+      "activity_type": "Strength Training",
+      "duration": 40,
+      "steps": 1200,
+      "calories": 260,
+      "date": "2026-09-23",
+      "notes": "Upper body push session",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "meals": [
+    {
+      "_id": "meal_1",
+      "user_id": "user_alex_1",
+      "meal_type": "Breakfast",
+      "food_name": "Avocado Toast & 2 Poached Eggs",
+      "quantity": "1 plate",
+      "calories": 420,
+      "notes": "Sprinkled with chia seeds and chili flakes",
+      "date": "2026-09-23",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "meal_2",
+      "user_id": "user_alex_1",
+      "meal_type": "Lunch",
+      "food_name": "Mediterranean Quinoa Salad with Chicken",
+      "quantity": "1 large bowl",
+      "calories": 550,
+      "notes": "Olive oil and lemon vinaigrette",
+      "date": "2026-09-23",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "water": [
+    {
+      "_id": "water_1",
+      "user_id": "user_alex_1",
+      "glasses": 6,
+      "daily_goal": 8,
+      "date": "2026-09-23",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "water_b",
+      "user_id": "user_jordan_2",
+      "glasses": 3,
+      "daily_goal": 10,
+      "date": "2026-09-23",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "sleep": [
+    {
+      "_id": "sleep_1",
+      "user_id": "user_alex_1",
+      "bedtime": "22:45",
+      "wake_time": "06:30",
+      "duration": 465,
+      "quality": "Good",
+      "date": "2026-09-23",
+      "notes": "Woke up refreshed with minimal interruptions",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "habits": [
+    {
+      "_id": "habit_1",
+      "user_id": "user_alex_1",
+      "name": "Morning Hydration (500ml)",
+      "category": "Health",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "habit_2",
+      "user_id": "user_alex_1",
+      "name": "30-Min Workout or Walk",
+      "category": "Fitness",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "habit_3",
+      "user_id": "user_alex_1",
+      "name": "Daily 25m Focus Block",
+      "category": "Productivity",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "habit_logs": [
+    {
+      "_id": "hl_1",
+      "user_id": "user_alex_1",
+      "habit_id": "habit_1",
+      "date": "2026-09-23",
+      "completed": true
+    },
+    {
+      "_id": "hl_2",
+      "user_id": "user_alex_1",
+      "habit_id": "habit_2",
+      "date": "2026-09-23",
+      "completed": true
+    },
+    {
+      "_id": "hl_3",
+      "user_id": "user_alex_1",
+      "habit_id": "habit_3",
+      "date": "2026-09-23",
+      "completed": false
+    }
+  ],
+  "goals": [
+    {
+      "_id": "goal_1",
+      "user_id": "user_alex_1",
+      "title": "Run 50km this month",
+      "description": "Improve aerobic capacity and cardio health",
+      "category": "Fitness",
+      "target_date": "2026-10-31",
+      "progress": 60,
+      "status": "In Progress",
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "goal_2",
+      "user_id": "user_alex_1",
+      "title": "Read 2 Books on Lifestyle Design",
+      "description": "Atomic Habits and Why We Sleep",
+      "category": "Personal",
+      "target_date": "2026-10-15",
+      "progress": 100,
+      "status": "Completed",
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "goal_3",
+      "user_id": "user_alex_1",
+      "title": "Maintain 8h sleep average for 14 days",
+      "description": "Regulate circadian rhythm with fixed bedtime",
+      "category": "Health",
+      "target_date": "2026-11-01",
+      "progress": 25,
+      "status": "In Progress",
+      "created_at": "2026-09-23T02:20:08.805Z",
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "focus_sessions": [
+    {
+      "_id": "fs_1",
+      "user_id": "user_alex_1",
+      "duration": 25,
+      "completed": true,
+      "date": "2026-09-23",
+      "tag": "Architecture & Coding",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    },
+    {
+      "_id": "fs_2",
+      "user_id": "user_alex_1",
+      "duration": 25,
+      "completed": true,
+      "date": "2026-09-23",
+      "tag": "API Integration",
+      "created_at": "2026-09-23T02:20:08.805Z"
+    }
+  ],
+  "settings": [
+    {
+      "_id": "set_1",
+      "user_id": "user_alex_1",
+      "theme": "light",
+      "water_goal": 8,
+      "pomodoro_focus": 25,
+      "pomodoro_break": 5,
+      "notifications_enabled": true,
+      "updated_at": "2026-09-23T02:20:08.805Z"
+    }
+  ]
+}

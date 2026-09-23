@@ -61,7 +61,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const handleUnauthorized = () => {
       setToken(null);
       setUser(null);
-      showToast('Session expired. Please log in again.', 'info');
+      const hash = window.location.hash || '';
+      const path = window.location.pathname || '';
+      const current = (hash + path).toLowerCase();
+      // Only toast session expired if the user was on an authenticated view
+      if (!current.includes('login') && !current.includes('register') && current !== '' && current !== '#/') {
+        showToast('Session expired. Please log in again.', 'info');
+      }
     };
 
     window.addEventListener('auth:unauthorized', handleUnauthorized);
